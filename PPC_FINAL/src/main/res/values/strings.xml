@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Obras disponibles</string>
+    <string name="help_user">Usuario</string>
+    <string name="help_password">Clave</string>
+    <string name="help_login">Gestión de obras en construcción</string>
+    <string name="button_logout">Cerrar sesion</string>
+    <string name="bienvenido">BIENVENIDO</string>
+    <string name="user_message">AL SISTEMA DE GESTION DE OBRAS EN CONSTRUCCION</string>
+    <string name="help_signup">Ingrese los datos para registrarse</string>
+    <string name="help_password_check">Reingrese la clave</string>
+    <string name="registrar">Registrar</string>
+    <string name="registrarse">Nuevo usuario? Registrarse</string>
+    <string name="title_activity_locacion">Map</string>
+    <string name="botonGeolocacion">Listar obras</string>
+    <string name="pruebaMaterial">Prueba material</string>
+    <string name="title_activity_obras">ObrasActivity</string>
+    <string name="title_activity_obras_list">ObrasList</string>
+    <string name="appBarTitle">Gestion de obras</string>
+</resources>
