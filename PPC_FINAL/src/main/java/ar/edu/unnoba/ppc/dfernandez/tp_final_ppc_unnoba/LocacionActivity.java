@@ -75,7 +75,6 @@ public class LocacionActivity extends FragmentActivity implements OnMapReadyCall
             this.location.setLatitude(-33.892987);
             this.location.setLongitude(-60.572388);
         }
-
     }
 
     @Override
@@ -90,30 +89,12 @@ public class LocacionActivity extends FragmentActivity implements OnMapReadyCall
             }
         }
     }
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
-        //marker = new MarkerOptions().position(currentPosition).title("Posicion actual");
-        //mMap.addMarker(marker);
         mMap.addMarker(new MarkerOptions().position(currentPosition).title("Posicion actual"));
-        //CameraPosition cameraPosition = new CameraPosition.Builder().target(currentPosition).zoom(17).bearing(0).build();
-        //mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition));
     }
 
@@ -124,7 +105,6 @@ public class LocacionActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override

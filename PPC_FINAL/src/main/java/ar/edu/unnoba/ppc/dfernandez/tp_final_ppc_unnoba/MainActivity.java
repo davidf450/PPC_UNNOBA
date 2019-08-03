@@ -1,9 +1,13 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +25,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -27,18 +34,17 @@ import org.json.JSONArray;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{// implements View.OnClickListener{
-    //Button botonCerrarSesion,listarObras;
+public class MainActivity extends AppCompatActivity{
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    //Toolbar toolBar;
     Gson gson;
     RequestQueue cola;
-    String url = "http://ppc.edit.com.ar:8080/resources/datos/obras/-34.581727/-60.931513";
+    String url = "http://ppc.edit.com.ar:8080/resources/datos/obras/";
     List<Obra> obras;
     AlertDialogManager alert;
     RecyclerView listado_obras;
     ObrasAdapter adapter;
+    FusedLocationProviderClient fusedLocationClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,8 @@ public class MainActivity extends AppCompatActivity{// implements View.OnClickLi
         //alert.showAlertDialog(MainActivity.this, "Bienvenido", "Bienvenido "+sharedPreferences.getString("user","invitado")+" al sistema de gestion de obras", false);
         cola = Volley.newRequestQueue(this);
         gson = new Gson();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getLocationFromProvider();
         cargar_obras();
 
     }
@@ -113,32 +121,36 @@ public class MainActivity extends AppCompatActivity{// implements View.OnClickLi
             alert.showAlertDialog(MainActivity.this, "Error!", "No hay obras para mostrar", false);
         }
     }
-/*    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.botonCerrarSesion:
-                //session.logoutUser();
-                new AlertDialog.Builder(this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Cerrar Sesión")
-                        .setMessage("¿Esta seguro de que desea cerrar la sesión?")
-                        .setPositiveButton("Si", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                editor = sharedPreferences.edit();
-                                editor.clear();
-                                editor.apply();
-                                finish();
-                            }
 
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-                break;
-
+    private void getLocationFromProvider() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1);
+        } else {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        url = url+location.getLatitude()+"/"+location.getLongitude();
+                        System.out.println("***************************************-->"+url);
+                        cargar_obras();
+                    }
+                }
+            });
         }
-    }*/
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLocationFromProvider();
+                }
+                break;
+            }
+        }
+    }
+
 
     @Override
     public void onBackPressed(){
