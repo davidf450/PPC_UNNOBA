@@ -12,6 +12,18 @@ public class Obra {
     Long telefono;
     static final String TIPO = "OBRA";
     Double valor;
+    public Obra(){};
+
+    public Obra(String descripcion, String detalle, Double distancia, String domicilio, Double latitud, Double longitud, Long telefono, Double valor) {
+        this.descripcion = descripcion;
+        this.detalle = detalle;
+        this.distancia = distancia;
+        this.domicilio = domicilio;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.telefono = telefono;
+        this.valor = valor;
+    }
 
     //<editor-fold desc="Getters y Setters">
     public String getDescripcion() {

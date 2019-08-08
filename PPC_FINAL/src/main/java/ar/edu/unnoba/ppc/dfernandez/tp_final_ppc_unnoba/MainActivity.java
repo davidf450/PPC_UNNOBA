@@ -34,6 +34,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -114,7 +115,9 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                new AlertDialog.Builder(MainActivity.this)
+                llenar_lista(null);
+                pg.setVisibility(View.GONE);
+                /*new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.stat_notify_error)
                         .setTitle("Error")
                         .setMessage("No es posible conectar con el web service en \n ["+url+"]")
@@ -141,19 +144,26 @@ public class MainActivity extends AppCompatActivity{
 
                         })
                         .show();
-                System.out.println("ERROR: hubo un error al conectar con el Web Service en [ "+url+" ]");
+                System.out.println("ERROR: hubo un error al conectar con el Web Service en [ "+url+" ]");*/
             }
         });
 
         cola.add(json_request);
     }
     private void llenar_lista(JSONArray source){
+        if (source!=null) {
+            obras = Arrays.asList(gson.fromJson(source.toString(), Obra[].class));
+        }else{
+            obras=new ArrayList<>();
+            obras.add(new Obra("Galpon descubierto","Reparar columnas",81245.2475,"Florida 345, Junin",-33.887246,-60.5657928,54236445667L,0.0));
+            obras.add(new Obra("Edificio interminable","Verificar trabajo",80245.2475,"Liniers 558, Junin",-31.887246,-59.5657928,54236420336L,0.0));
+            obras.add(new Obra("Casa de la otra punta","Traer 100g de clavos y martillo",82648.7748,"España 430, Junin",-32.995471,-61.5578615,54236417556L,0.0));
 
-        obras = Arrays.asList(gson.fromJson(source.toString(),Obra[].class));
-        if(obras != null && !obras.isEmpty()) {
+        }
+        if (obras != null && !obras.isEmpty()) {
             adapter = new ObrasAdapter(obras);
             listado_obras.setAdapter(adapter);
-        }else{
+        } else {
             alert.showAlertDialog(MainActivity.this, "Error!", "No hay obras para mostrar", false);
         }
     }
