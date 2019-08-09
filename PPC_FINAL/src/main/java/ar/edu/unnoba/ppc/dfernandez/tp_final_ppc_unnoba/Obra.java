@@ -1,18 +1,23 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
-import com.google.android.gms.maps.model.LatLng;
+import android.graphics.Bitmap;
 
-public class Obra {
-    String descripcion;
-    String detalle;
-    Double distancia;
-    String domicilio;
-    Double latitud;
-    Double longitud;
-    Long telefono;
+
+public class Obra{
+    private String descripcion;
+    private String detalle;
+    private Double distancia;
+    private String domicilio;
+    private Double latitud;
+    private Double longitud;
+    private Long telefono;
     static final String TIPO = "OBRA";
-    Double valor;
+    private Double valor;
+    private Bitmap image;
+    //una referencia a un recurso de imagen, tecnicamente deberia ser un enlace a un recurso web contenido en el json que provee el web service
+    private int referenceImage;
     public Obra(){};
+
 
     public Obra(String descripcion, String detalle, Double distancia, String domicilio, Double latitud, Double longitud, Long telefono, Double valor) {
         this.descripcion = descripcion;
@@ -24,6 +29,8 @@ public class Obra {
         this.telefono = telefono;
         this.valor = valor;
     }
+
+
 
     //<editor-fold desc="Getters y Setters">
     public String getDescripcion() {
@@ -89,6 +96,12 @@ public class Obra {
     public void setValor(Double valor) {
         this.valor = valor;
     }
+
+    public int getImageReference(){ return this.referenceImage; }
+
+    public void setImage(int reference){ this.referenceImage=reference; }
+
+
     //</editor-fold>
 
 
@@ -105,4 +118,6 @@ public class Obra {
                 ", valor=" + valor +
                 '}';
     }
+
+
 }

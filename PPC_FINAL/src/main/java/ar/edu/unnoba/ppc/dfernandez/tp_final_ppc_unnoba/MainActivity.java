@@ -1,6 +1,7 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,16 +10,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.android.volley.Request;
@@ -30,7 +30,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 
@@ -38,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Gson gson;
@@ -50,15 +49,15 @@ public class MainActivity extends AppCompatActivity{
     ObrasAdapter adapter;
     FusedLocationProviderClient fusedLocationClient;
     ProgressBar pg;
-    JsonObject json;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(LoginActivity.S_PREFERENCES, Context.MODE_PRIVATE);
-        pg = (ProgressBar) findViewById(R.id.loading_spinner);
+        pg = findViewById(R.id.loading_spinner);
         listado_obras = findViewById(R.id.recycler);
-        //alert.showAlertDialog(MainActivity.this, "Bienvenido", "Bienvenido "+sharedPreferences.getString("user","invitado")+" al sistema de gestion de obras", false);
         cola = Volley.newRequestQueue(this);
         gson = new Gson();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity{
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -161,6 +159,10 @@ public class MainActivity extends AppCompatActivity{
 
         }
         if (obras != null && !obras.isEmpty()) {
+            //el json que provee el web service deberia contener un campo con un enlace a un recurso web que ilustre la obra
+            obras.get(0).setImage(R.drawable.galpon_xs);
+            obras.get(1).setImage(R.drawable.edificio_interminable_xs);
+            obras.get(2).setImage(R.drawable.casa_xs);
             adapter = new ObrasAdapter(obras);
             listado_obras.setAdapter(adapter);
         } else {
@@ -177,7 +179,6 @@ public class MainActivity extends AppCompatActivity{
                 public void onSuccess(Location location) {
                     if (location != null) {
                         url = url+location.getLatitude()+"/"+location.getLongitude();
-                        System.out.println("***************************************-->"+url);
                         cargar_obras();
                     }
                 }
@@ -197,8 +198,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
-    @Override
+      @Override
     public void onBackPressed(){
         finish();
     }

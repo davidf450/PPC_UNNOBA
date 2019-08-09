@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scene_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:id="@+id/scene_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imgConstruccion"
+                android:layout_width="wrap_content"
+                android:layout_height="240dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:padding="10dp"
+                />
+
+            <TextView
+                android:id="@+id/descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descripcion"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:layout_below="@+id/imgConstruccion"
+                />
+
+            <TextView
+                android:id="@+id/detalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="detalle"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:layout_below="@id/descripcion"
+                android:layout_marginBottom="12dp"
+
+                />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/detailConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/detalle">
+
+        <TextView
+            android:id="@+id/distanciaTag"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="Distancia"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/domicilioTag"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="Domicilio"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distanciaTag" />
+
+        <TextView
+            android:id="@+id/distancia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="valor distancia"
+            android:textColor="#3F51B5"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/distanciaTag"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/domicilio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="valor domicilio"
+            android:textColor="#3F51B5"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/domicilioTag"
+            app:layout_constraintTop_toBottomOf="@+id/distancia" />
+
+        <TextView
+            android:id="@+id/latTag"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:text="Latitud"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/domicilioTag" />
+
+        <TextView
+            android:id="@+id/latitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="valor latitud"
+            android:textColor="#3F51B5"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/latTag"
+            app:layout_constraintTop_toBottomOf="@+id/domicilio" />
+
+        <TextView
+            android:id="@+id/longTag"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:text="Longitud"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/latTag" />
+
+        <TextView
+            android:id="@+id/longitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="valor longitud"
+            android:textColor="#3F51B5"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/longTag"
+            app:layout_constraintTop_toBottomOf="@+id/latitud" />
+
+        <TextView
+            android:id="@+id/telefonoTag"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:text="Telefono"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/longTag" />
+
+        <TextView
+            android:id="@+id/telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="valor telefono"
+            android:textColor="#3F51B5"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/telefonoTag"
+            app:layout_constraintTop_toBottomOf="@+id/longitud" />
+
+        <TextView
+            android:id="@+id/valorTag"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="48dp"
+            android:text="Valor"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/telefonoTag" />
+
+        <TextView
+            android:id="@+id/valor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="48dp"
+            android:text="valor obra"
+            android:textColor="#3F51B5"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/valorTag"
+            app:layout_constraintTop_toBottomOf="@+id/telefono" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+                <!--<TextView
+                    android:id="@+id/domicilio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="domicilio"
+                    android:textAlignment="textStart"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@id/distancia"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:id="@+id/latitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="latitud"
+                    android:textAlignment="textStart"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@id/domicilio"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:id="@+id/longitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="longitud"
+                    android:textAlignment="textStart"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@id/latitud"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:id="@+id/telefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="telefono"
+                    android:textAlignment="textStart"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@id/longitud"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:id="@+id/valor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="valor"
+                    android:textAlignment="textStart"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@id/telefono"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="20dp"
+                    />-->
+</RelativeLayout>
+</ScrollView>
