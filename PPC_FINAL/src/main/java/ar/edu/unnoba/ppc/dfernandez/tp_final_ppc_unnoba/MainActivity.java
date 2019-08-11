@@ -139,8 +139,64 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG,"Error al conectar con el webService, revertiendo a datos locales");
-                llenar_lista(null);
-                pg.setVisibility(View.GONE);
+                if(getIntent().getIntExtra("attempts",0)!=0){
+                    new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(android.R.drawable.stat_notify_error)
+                        .setTitle("Error")
+                        .setMessage("No es posible conectar con el web service en \n ["+url+"]")
+                        .setPositiveButton("Reintentar", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                                Intent i = getIntent();
+                                i.putExtra("attempts",getIntent().getIntExtra("attempts",0)-1);
+                                startActivity(i);
+                                }
+                        })
+                        .setNegativeButton("Salir", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                editor = sharedPreferences.edit();
+                                editor.clear();
+                                editor.apply();
+                                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(i);
+                            }
+                        })
+                        .show();
+
+                }else{
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setIcon(android.R.drawable.stat_notify_error)
+                            .setTitle("Atencion")
+                            .setMessage("Imposible conectar con el web Service, se utilizaran los ultimos datos conocidos. Podrian no estar actualizados")
+                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    llenar_lista(null);
+                                    pg.setVisibility(View.GONE);
+                                }
+                            })
+                            .setNegativeButton("Salir", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    editor = sharedPreferences.edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(i);
+                                }
+
+                            })
+                            .show();
+
+                    //llenar_lista(null);
+                    //pg.setVisibility(View.GONE);
+
                 /*
                     Si se encuentra un error con la conexion al webservice, se muestra una alerta
                     solicitando al usuario si desea Reintentar la conexion o salir de la aplicacion.
@@ -176,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements
                         })
                         .show();
                 */
-            }
+            }}
         });
 
         cola.add(json_request);

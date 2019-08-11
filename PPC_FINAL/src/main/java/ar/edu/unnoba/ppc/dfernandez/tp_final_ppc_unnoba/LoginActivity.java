@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void startMainActivity(){
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        i.putExtra("attempts",3);
         startActivity(i);
     }
     @Override
