@@ -1,20 +1,14 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
-//https://developer.android.com/training/data-storage/shared-preferences#java
-//https://www.tutorialspoint.com/android/android_session_management.htm
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText user, password;
@@ -24,10 +18,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String S_PREFERENCES = "preferences";
     public static final String KEY = "user";
     public static final String VALUE = "password";
+    public static final String TAG = LoginActivity.class.getSimpleName();
     AlertDialogManager alert = new AlertDialogManager();
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sp_editor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +33,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ingresar.setOnClickListener(this);
         sharedPreferences = getSharedPreferences(S_PREFERENCES, Context.MODE_PRIVATE);
         if(sharedPreferences.contains(KEY) && sharedPreferences.contains(VALUE)) {
+            Log.i(TAG, "Reingreso correcto");
             //verificar si ya existe un usuario activo en la shared preference e iniciar directamente la actividad
             startMainActivity();
             finish();
         }
-
-
     }
 
     public void startMainActivity(){
@@ -60,22 +53,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     //usar un objeto User en vez de Strings simples para posible persistencia despues
                     User newLoginUser = new User(user.getText().toString(), password.getText().toString());
                     if(newLoginUser.getUsername().equals(default_user) && newLoginUser.getPassword().equals(default_pass)){
-
+                        Log.i(TAG, "Acceso autorizado para el usuario "+newLoginUser.getUsername());
                         sp_editor = sharedPreferences.edit();
                         sp_editor.putString(KEY,newLoginUser.getUsername());
                         sp_editor.putString(VALUE,newLoginUser.getPassword());
-                        sp_editor.apply(); //mejor hacerlo sin bloquear el hilo principal de la app
+                        sp_editor.apply();
                         startMainActivity();
                         finish();
                         break;
                     }else{
                         // no coinciden los datos
+                        Log.e(TAG, "Acceso restringido - Las credenciales no son correctas");
                         alert.showAlertDialog(LoginActivity.this, "Fallo el login..", "El usuario o la contraseña es incorrecto", false);
                         break;
                     }
                 }else{
                     // el usuario no ingreso nada
                     // mostrar una alerta solicitando los datos
+                    Log.e(TAG, "Intento de inicio de sesión con datos invalidos o inexistentes");
                     alert.showAlertDialog(LoginActivity.this, "Fallo el login..", "Por favor ingrese el usuario y/o la contraseña", false);
                     break;
                 }
@@ -85,8 +80,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }
 

@@ -2,7 +2,6 @@ package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
 import android.graphics.Bitmap;
 
-
 public class Obra{
     private String descripcion;
     private String detalle;
@@ -29,7 +28,6 @@ public class Obra{
         this.telefono = telefono;
         this.valor = valor;
     }
-
 
 
     //<editor-fold desc="Getters y Setters">
@@ -103,7 +101,6 @@ public class Obra{
 
 
     //</editor-fold>
-
 
     @Override
     public String toString() {

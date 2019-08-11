@@ -1,8 +1,8 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
-
 import android.content.Intent;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
-
 public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHolder> {
 
     private List<Obra> obras;
@@ -24,7 +23,7 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
     public ObrasAdapter(List<Obra> obras) {
         this.obras = obras;
     }
-
+    public  ObrasAdapter(){};
     public class ObrasViewHolder extends RecyclerView.ViewHolder {
         TextView descripcion,detalle;
         CardView card;
@@ -42,8 +41,6 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Transition fadeTransition = new Fade();
-                    //TransitionManager.go(obra_details, fadeTransition);
                     Intent intent = new Intent(img.getContext(),ObrasDetail.class);
                     Gson gson = new Gson();
                     String obra_json = gson.toJson(obra_mostrar);
@@ -65,6 +62,7 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
 
     }
 
+    @NonNull
     @Override
     public ObrasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -73,7 +71,7 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
     }
 
     @Override
-    public void onBindViewHolder(ObrasViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ObrasViewHolder holder, int position) {
         holder.setObra(obras.get(position));
         holder.updateUI();
     }

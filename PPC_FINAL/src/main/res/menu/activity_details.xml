@@ -3,8 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <item
-        android:id="@+id/UniqueMapView"
+        android:id="@+id/MapsView"
         android:title="@string/map_view"
+        app:showAsAction="collapseActionView"
+        />
+    <item
+        android:id="@+id/PpcMapView"
+        android:title="@string/ppc_map_view"
         app:showAsAction="collapseActionView"
         />
     <item
@@ -12,5 +17,5 @@
         android:title="@string/button_logout"
         app:showAsAction="collapseActionView"
         />
-
+    PpcMapView
 </menu>

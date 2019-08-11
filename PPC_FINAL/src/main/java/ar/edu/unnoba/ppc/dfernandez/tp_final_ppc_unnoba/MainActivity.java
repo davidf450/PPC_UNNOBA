@@ -6,19 +6,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.android.volley.Request;
@@ -27,6 +34,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
@@ -37,7 +46,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
+
+    private static final int PERMISSION_CHECK = 1800;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Gson gson;
@@ -47,8 +61,13 @@ public class MainActivity extends AppCompatActivity {
     AlertDialogManager alert;
     RecyclerView listado_obras;
     ObrasAdapter adapter;
-    FusedLocationProviderClient fusedLocationClient;
     ProgressBar pg;
+    GoogleApiClient mGoogleApiClient;
+    public static final String TAG = MainActivity.class.getSimpleName();
+    final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    static final int INTERVAL = 10000;
+    static final int FAST_INTERVAL = 1000;
+    LocationRequest mLocationRequest;
 
 
     @Override
@@ -60,11 +79,17 @@ public class MainActivity extends AppCompatActivity {
         listado_obras = findViewById(R.id.recycler);
         cola = Volley.newRequestQueue(this);
         gson = new Gson();
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        getLocationFromProvider();
-        cargar_obras();
-
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(INTERVAL)
+                .setFastestInterval(FAST_INTERVAL);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
@@ -103,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
         cola = Volley.newRequestQueue(this);
         JsonArrayRequest json_request = new JsonArrayRequest(Request.Method.GET,url,null,
                 new Response.Listener<JSONArray>() {
-
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.i(TAG,"Se obtuvo una conexion exitosa con el webService en "+url);
                         llenar_lista(response);
                         pg.setVisibility(View.GONE);
                     }
@@ -113,8 +138,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e(TAG,"Error al conectar con el webService, revertiendo a datos locales");
                 llenar_lista(null);
                 pg.setVisibility(View.GONE);
+                /*
+                    Si se encuentra un error con la conexion al webservice, se muestra una alerta
+                    solicitando al usuario si desea Reintentar la conexion o salir de la aplicacion.
+                    TODO: usar un contador de intentos, luego de cierta cantidad revertir a datos locales
+
+
+                 */
                 /*new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.stat_notify_error)
                         .setTitle("Error")
@@ -142,14 +175,20 @@ public class MainActivity extends AppCompatActivity {
 
                         })
                         .show();
-                System.out.println("ERROR: hubo un error al conectar con el Web Service en [ "+url+" ]");*/
+                */
             }
         });
 
         cola.add(json_request);
     }
     private void llenar_lista(JSONArray source){
-        if (source!=null) {
+        /*
+            TODO: Base de datos local de Obras
+                En cada conexion exitosa comparar lo obtenido con lo existente en una base local. Si hay datos nuevos
+           *    actualizar la base. De esta forma, si no se logra una conexion exitosa con el WS, pueden usarse datos
+           *    locales, advirtiendo al usuario de que posiblemente no este actualizados.
+        */
+         if (source!=null) {
             obras = Arrays.asList(gson.fromJson(source.toString(), Obra[].class));
         }else{
             obras=new ArrayList<>();
@@ -170,36 +209,74 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getLocationFromProvider() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1);
-        } else {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        url = url+location.getLatitude()+"/"+location.getLongitude();
-                        cargar_obras();
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case 1: {
+            case PERMISSION_CHECK: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocationFromProvider();
+                    getLocation();
                 }
                 break;
             }
         }
     }
 
-      @Override
+    @Override
     public void onBackPressed(){
         finish();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i(TAG, "Conectado a los servicios de geolocalizacion");
+        getLocation();
+    }
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1);
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG, "Se suspendio la conexion, por favor reconectar..");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.w(TAG, "Error de conexion con los servicios de geolocalizacion, reintentando..");
+        if (connectionResult.hasResolution()) {
+            try {
+                // Iniciamos una actividad que intenta resolver el error
+                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.e(TAG, "Los servicios de geolocalizacion fallaron con codigo: " + connectionResult.getErrorCode());
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d(TAG, "El dispositivo se encuentra en: ["+location.getLatitude()+","+location.getLongitude());
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        mGoogleApiClient.disconnect();
+        url = url+location.getLatitude()+"/"+location.getLongitude();
+        cargar_obras();
     }
 }

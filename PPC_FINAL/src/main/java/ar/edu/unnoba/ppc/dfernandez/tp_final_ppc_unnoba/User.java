@@ -9,7 +9,7 @@ public class User {
         this.username = username.toLowerCase();
         this.password = password.toLowerCase();
     }
-
+//<editor-fold desc="Getters and setters">
     public String getUsername() {
         return username;
     }
@@ -29,4 +29,5 @@ public class User {
     public int usernameLenght(){
         return username.length();
     }
+//</editor-fold>
 }

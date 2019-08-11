@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scene_container"
+    android:id="@+id/scrollContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -207,64 +206,8 @@
             app:layout_constraintStart_toEndOf="@+id/valorTag"
             app:layout_constraintTop_toBottomOf="@+id/telefono" />
 
-
     </android.support.constraint.ConstraintLayout>
 
-                <!--<TextView
-                    android:id="@+id/domicilio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="domicilio"
-                    android:textAlignment="textStart"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_below="@id/distancia"
-                    android:layout_marginStart="20dp"
-                    />
-                <TextView
-                    android:id="@+id/latitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="latitud"
-                    android:textAlignment="textStart"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_below="@id/domicilio"
-                    android:layout_marginStart="20dp"
-                    />
-                <TextView
-                    android:id="@+id/longitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="longitud"
-                    android:textAlignment="textStart"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_below="@id/latitud"
-                    android:layout_marginStart="20dp"
-                    />
-                <TextView
-                    android:id="@+id/telefono"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="telefono"
-                    android:textAlignment="textStart"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_below="@id/longitud"
-                    android:layout_marginStart="20dp"
-                    />
-                <TextView
-                    android:id="@+id/valor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="valor"
-                    android:textAlignment="textStart"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_below="@id/telefono"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="20dp"
-                    />-->
 </RelativeLayout>
+
 </ScrollView>

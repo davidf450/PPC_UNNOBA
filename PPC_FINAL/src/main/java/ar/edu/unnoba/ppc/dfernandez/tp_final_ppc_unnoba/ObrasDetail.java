@@ -1,11 +1,10 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.MapView;
 import com.google.gson.Gson;
 
 public class ObrasDetail extends AppCompatActivity {
@@ -21,11 +21,12 @@ public class ObrasDetail extends AppCompatActivity {
     TextView descripcion,detalle,distancia,domicilio,latitud,longitud,telefono,valor;
     ImageView imgConstruccion;
     Obra obra;
+    MapView mapView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.obra_details);
-        descripcion = (TextView) findViewById(R.id.descripcion);
+        descripcion = findViewById(R.id.descripcion);
         detalle = findViewById(R.id.detalle);
         distancia = findViewById(R.id.distancia);
         domicilio = findViewById(R.id.domicilio);
@@ -76,8 +77,14 @@ public class ObrasDetail extends AppCompatActivity {
                         .setNegativeButton("No", null)
                         .show();
                 return true;
-            case R.id.UniqueMapView:
-                Intent i = new Intent(this,LocacionActivity.class);
+            case R.id.MapsView:
+                String uri = "http://maps.google.com/maps?daddr=" + obra.getLatitud() + "," + obra.getLongitud() + " (" + obra.getDescripcion() + ")";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+                startActivity(intent);
+                return true;
+            case R.id.PpcMapView:
+                Intent i = new Intent(this,MapsActivity.class);
                 i.putExtra("latitud",obra.getLatitud());
                 i.putExtra("longitud",obra.getLongitud());
                 i.putExtra("descripcion",obra.getDescripcion());

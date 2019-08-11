@@ -17,6 +17,8 @@
     <string name="title_activity_obras_list">ObrasList</string>
     <string name="appBarTitle">Gestion de obras</string>
     <string name="obra_distancia">Distancia:</string>
-    <string name="map_view">Ver en mapa</string>
+    <string name="map_view">Obtener direcciones</string>
     <string name="settingsMain">Preferencias</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="ppc_map_view">Ver en mapa</string>
 </resources>

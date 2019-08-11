@@ -15,9 +15,7 @@
         android:layout_width="156dp"
         android:layout_height="152dp"
         android:layout_centerInParent="true"
-
-        android:foregroundTint="#8BC34A"
-        android:progressTint="#8BC34A" />
+        />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
