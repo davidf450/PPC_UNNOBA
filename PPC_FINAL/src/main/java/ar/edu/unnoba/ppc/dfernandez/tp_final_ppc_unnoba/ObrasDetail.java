@@ -1,6 +1,7 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ public class ObrasDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.obra_details);
+        sharedPreferences = getSharedPreferences(LoginActivity.S_PREFERENCES, Context.MODE_PRIVATE);
         descripcion = findViewById(R.id.descripcion);
         detalle = findViewById(R.id.detalle);
         distancia = findViewById(R.id.distancia);
