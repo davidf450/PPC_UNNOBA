@@ -21,4 +21,6 @@
     <string name="settingsMain">Preferencias</string>
     <string name="title_activity_maps">Map</string>
     <string name="ppc_map_view">Ver en mapa</string>
+    <string name="button_ingresar">Ingresar</string>
+    <string name="button_registrar">Registrar</string>
 </resources>

@@ -4,20 +4,24 @@ package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
     TextView new_user,new_user_password,passwordCheck;
     Button registrar;
-    //String newUsername,newUsernamePassword;
     AlertDialogManager alert = new AlertDialogManager();
     SharedPreferences sharedPreferences;
-    //SharedPreferences.Editor editor = sharedPreferences.edit();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,37 +31,23 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         passwordCheck = (TextView) findViewById(R.id.passwordCheck);
         registrar = (Button) findViewById(R.id.registrar);
         registrar.setOnClickListener(this);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
     public void onClick(View v) {
         sharedPreferences = getSharedPreferences(LoginActivity.S_PREFERENCES, Context.MODE_PRIVATE);
-
         switch (v.getId()){
             case R.id.registrar:
                 if(verifyNewUser()){
-                    //Intent i = new Intent();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(new_user.getText().toString(),new_user_password.getText().toString());
-                    //editor.putString("password",user_password);
                     editor.apply();
-                    //Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    //startActivity(i);
                     finish();
                     break;
-
-                    //ArrayList<String> newUserData = new ArrayList<>();
-                    //newUserData.add(0,new_user.getText().toString());
-                    //newUserData.add(1,new_user_password.getText().toString());
-                    //returnIntent.putStringArrayListExtra("newUser",newUserData);
-                    //setResult(Activity.RESULT_OK,returnIntent);
-                    //finish();
-                    //break;
                 }else{
                     break;
                 }
-
-
         }
     }
 
@@ -67,14 +57,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         if(username.trim().length() > 0 && user_password.trim().length() > 0){
             if(user_password.equals(passwordCheck.getText().toString())){
-
-                if(sharedPreferences.getString(username,null)==null){
+                User newUser = PPCDatabase.getInstance(this).userDao().findByName(username,user_password);
+                if(newUser==null){
+                    newUser = new User(username,user_password);
+                    PPCDatabase.getInstance(this).userDao().insertAll(newUser);
+                    Toast.makeText(this, "Se registro con exito al usuario "+username,
+                            Toast.LENGTH_SHORT).show();
                     return true;
-                }
-                //ArrayList<String> actual_users = getIntent().getStringArrayListExtra("actualUsers");
-                //if(!actual_users.contains(username)){
-                //    return true;
-                else{
+                }else{
                     alert.showAlertDialog(SignInActivity.this, "Atencion!", "Ya existe el usuario especificado", false);
                     return false;
                 }

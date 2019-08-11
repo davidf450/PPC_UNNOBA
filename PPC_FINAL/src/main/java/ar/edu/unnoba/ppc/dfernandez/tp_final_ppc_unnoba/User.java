@@ -1,9 +1,19 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class User {
+    @PrimaryKey(autoGenerate = true)
+    public int uid;
+
     private String username;
     private String password;
 
+    @Ignore
     public User(){}
     public User (String username, String password){
         this.username = username.toLowerCase();

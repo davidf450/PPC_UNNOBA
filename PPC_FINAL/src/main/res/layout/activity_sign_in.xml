@@ -6,7 +6,9 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".LoginActivity"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <!-- Login progress -->
     <ProgressBar

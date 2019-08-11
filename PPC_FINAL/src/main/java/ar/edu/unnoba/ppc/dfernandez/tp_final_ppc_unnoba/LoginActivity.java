@@ -7,14 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText user, password;
-    Button ingresar;
-    final String default_user = "ppcadmin";
-    final String default_pass = "unnoba";
+    Button ingresar,registrar;
     public static final String S_PREFERENCES = "preferences";
     public static final String KEY = "user";
     public static final String VALUE = "password";
@@ -31,7 +30,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password = (EditText) findViewById(R.id.password);
         ingresar = (Button) findViewById(R.id.ingresar);
         ingresar.setOnClickListener(this);
+        registrar = (Button) findViewById(R.id.registrar);
+        registrar.setOnClickListener(this);
         sharedPreferences = getSharedPreferences(S_PREFERENCES, Context.MODE_PRIVATE);
+        user.setText("");
+        password.setText("");
         if(sharedPreferences.contains(KEY) && sharedPreferences.contains(VALUE)) {
             Log.i(TAG, "Reingreso correcto");
             //verificar si ya existe un usuario activo en la shared preference e iniciar directamente la actividad
@@ -50,9 +53,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.ingresar:
                 // Verificar si se ingreso usuario y contraseña
                 if(user.getText().toString().trim().length() > 0 && password.getText().toString().trim().length() > 0){
-                    //usar un objeto User en vez de Strings simples para posible persistencia despues
-                    User newLoginUser = new User(user.getText().toString(), password.getText().toString());
-                    if(newLoginUser.getUsername().equals(default_user) && newLoginUser.getPassword().equals(default_pass)){
+
+                    User newLoginUser = PPCDatabase.getInstance(this).userDao().findByName(
+                            user.getText().toString(), password.getText().toString());
+                    if(newLoginUser!=null){
                         Log.i(TAG, "Acceso autorizado para el usuario "+newLoginUser.getUsername());
                         sp_editor = sharedPreferences.edit();
                         sp_editor.putString(KEY,newLoginUser.getUsername());
@@ -61,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         startMainActivity();
                         finish();
                         break;
+
                     }else{
                         // no coinciden los datos
                         Log.e(TAG, "Acceso restringido - Las credenciales no son correctas");
@@ -74,6 +79,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     alert.showAlertDialog(LoginActivity.this, "Fallo el login..", "Por favor ingrese el usuario y/o la contraseña", false);
                     break;
                 }
+            case R.id.registrar:
+                Intent i = new Intent(LoginActivity.this, SignInActivity.class);
+                startActivity(i);
+                break;
 
         }
 
