@@ -5,16 +5,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.MapView;
 import com.google.gson.Gson;
+
+import java.text.DecimalFormat;
 
 public class ObrasDetail extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -42,7 +46,11 @@ public class ObrasDetail extends AppCompatActivity {
         imgConstruccion.setImageResource(obra.getImageReference());
         descripcion.setText(obra.getDescripcion());
         detalle.setText(obra.getDetalle());
-        distancia.setText(String.valueOf(obra.getDistancia()));
+        if(obra.getDistancia()>1000){
+            distancia.setText(String.format("%.3f",obra.getDistancia()/1000)+" Km");
+        }else {
+            distancia.setText(String.format("%.3f",obra.getDistancia()) + " metros");
+        }
         domicilio.setText(obra.getDomicilio());
         latitud.setText(String.valueOf(obra.getLatitud()));
         longitud.setText(String.valueOf(obra.getLongitud()));
@@ -95,5 +103,6 @@ public class ObrasDetail extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 }

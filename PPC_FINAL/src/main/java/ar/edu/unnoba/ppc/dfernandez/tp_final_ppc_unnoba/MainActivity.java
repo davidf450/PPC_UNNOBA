@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements
     SharedPreferences.Editor editor;
     Gson gson;
     RequestQueue cola;
-    String url = "http://ppc.edit.com.ar:8080/resources/datos/obras/";
+    String url;
     List<Obra> obras;
     AlertDialogManager alert;
     RecyclerView listado_obras;
@@ -274,7 +274,8 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "El dispositivo se encuentra en: ["+location.getLatitude()+","+location.getLongitude());
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         mGoogleApiClient.disconnect();
-        url = url+location.getLatitude()+"/"+location.getLongitude();
+        url = "http://ppc.edit.com.ar/resources/datos/obras/"+location.getLatitude()+"/"+location.getLongitude();
+        //url = url+location.getLatitude()+"/"+location.getLongitude();
         cargar_obras();
     }
 }
