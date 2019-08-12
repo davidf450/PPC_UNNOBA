@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements
                 new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.stat_notify_error)
                         .setTitle("Error")
-                        .setMessage("No es posible conectar con el web service, se utilizaran datos locales (podrian no estar actualizados)")
+                        .setMessage("No es posible conectar con el web service, se utilizaran datos locales (podrian no estar actualizados) \n La distancia NO puede calcularse en base a datos locales")
                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener()
                         {
                             @Override
@@ -215,10 +215,9 @@ public class MainActivity extends AppCompatActivity implements
             obras = Arrays.asList(gson.fromJson(source.toString(), Obra[].class));
         }else{
             obras=new ArrayList<>();
-            obras.add(new Obra("Galpon descubierto","Reparar columnas",81245.2475,"Florida 345, Junin",-33.887246,-60.5657928,54236445667L,0.0));
-            obras.add(new Obra("Edificio interminable","Verificar trabajo",80245.2475,"Liniers 558, Junin",-31.887246,-59.5657928,54236420336L,0.0));
-            obras.add(new Obra("Casa de la otra punta","Traer 100g de clavos y martillo",82648.7748,"España 430, Junin",-32.995471,-61.5578615,54236417556L,0.0));
-
+            obras.add(new Obra("Galpón del parque","Revisar lo que hizo el plomero",81258.71875063518,"Parque Industrial JUNIN",-34.556917,-60.919601,5423644440000L,0.0));
+            obras.add(new Obra("Edificio interminable","Hay que demoler el último piso",84072.29834580343,"República 219 JUNIN",-34.580522,-60.930744,5423644449999L,0.0));
+            obras.add(new Obra("Casa en la otra punta","Llevar 100grs de clavos y un martillo",84753.2163683408,"Rivadavia 1465 JUNIN",-34.575407,-60.962179,5423644448888L,0.0));
         }
         if (obras != null && !obras.isEmpty()) {
             //el json que provee el web service deberia contener un campo con un enlace a un recurso web que ilustre la obra
@@ -233,7 +232,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_CHECK: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
