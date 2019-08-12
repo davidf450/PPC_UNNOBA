@@ -2,7 +2,14 @@ package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
 import android.graphics.Bitmap;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Obra{
+    @PrimaryKey(autoGenerate = true)
+    private int oid;
     private String descripcion;
     private String detalle;
     private Double distancia;
@@ -12,9 +19,10 @@ public class Obra{
     private Long telefono;
     static final String TIPO = "OBRA";
     private Double valor;
-    private Bitmap image;
     //una referencia a un recurso de imagen, tecnicamente deberia ser un enlace a un recurso web contenido en el json que provee el web service
     private int referenceImage;
+
+    @Ignore
     public Obra(){};
 
     public Obra(String descripcion, String detalle, Double distancia, String domicilio, Double latitud, Double longitud, Long telefono, Double valor) {
@@ -92,10 +100,15 @@ public class Obra{
         this.valor = valor;
     }
 
-    public int getImageReference(){ return this.referenceImage; }
+    public int getOid() { return oid; }
 
-    public void setImage(int reference){ this.referenceImage=reference; }
+    public void setOid(int oid) { this.oid = oid; }
 
+    public static String getTIPO() { return TIPO; }
+
+    public int getReferenceImage() { return referenceImage; }
+
+    public void setReferenceImage(int referenceImage) { this.referenceImage = referenceImage; }
 
     //</editor-fold>
 

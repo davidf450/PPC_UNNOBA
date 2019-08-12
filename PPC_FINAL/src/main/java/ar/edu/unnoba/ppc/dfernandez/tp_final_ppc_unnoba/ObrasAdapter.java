@@ -57,7 +57,7 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
         public void updateUI(){
             descripcion.setText(obra_mostrar.getDescripcion());
             detalle.setText(obra_mostrar.getDetalle());
-            img.setImageResource(obra_mostrar.getImageReference());
+            img.setImageResource(obra_mostrar.getReferenceImage());
         }
 
     }

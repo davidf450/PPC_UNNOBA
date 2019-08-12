@@ -43,7 +43,7 @@ public class ObrasDetail extends AppCompatActivity {
         Gson gson = new Gson();
         obra = gson.fromJson(getIntent().getStringExtra("myjson"), Obra.class);
 
-        imgConstruccion.setImageResource(obra.getImageReference());
+        imgConstruccion.setImageResource(obra.getReferenceImage());
         descripcion.setText(obra.getDescripcion());
         detalle.setText(obra.getDetalle());
         if(obra.getDistancia()>1000){

@@ -195,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements
                         .setNegativeButton("No", null)
                         .show();
                 return true;
+            case R.id.reconectar:
+                recreate();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -241,40 +243,6 @@ public class MainActivity extends AppCompatActivity implements
 
                         })
                         .show();
-
-                /*
-                    Si se encuentra un error con la conexion al webservice, se muestra una alerta
-                    solicitando al usuario si desea Reintentar la conexion o salir de la aplicacion.
-                    TODO: usar un contador de intentos, luego de cierta cantidad revertir a datos locales
-                 */
-                /*new AlertDialog.Builder(MainActivity.this)
-                        .setIcon(android.R.drawable.stat_notify_error)
-                        .setTitle("Error")
-                        .setMessage("No es posible conectar con el web service en \n ["+url+"]")
-                        .setPositiveButton("Reintentar", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                                Intent i = getIntent();
-                                startActivity(i);
-                                }
-
-                        })
-                        .setNegativeButton("Salir", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                editor = sharedPreferences.edit();
-                                editor.clear();
-                                editor.apply();
-                                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                                startActivity(i);
-                            }
-
-                        })
-                        .show();
-                */
             }
         });
 
@@ -289,21 +257,50 @@ public class MainActivity extends AppCompatActivity implements
         */
          if (source!=null) {
             obras = Arrays.asList(gson.fromJson(source.toString(), Obra[].class));
+            if(PPCDatabase.getInstance(this).obraDao().getAll().isEmpty()) {
+                for(Obra o:obras){
+                    PPCDatabase.getInstance(this).obraDao().insertAll(o);
+                }
+            }else {
+                for (Obra o : obras) {
+                    PPCDatabase.getInstance(this).obraDao().update(o);
+                }
+            }
         }else{
-            obras=new ArrayList<>();
-            obras.add(new Obra("Galpón del parque","Revisar lo que hizo el plomero",81258.71875063518,"Parque Industrial JUNIN",-34.556917,-60.919601,5423644440000L,0.0));
-            obras.add(new Obra("Edificio interminable","Hay que demoler el último piso",84072.29834580343,"República 219 JUNIN",-34.580522,-60.930744,5423644449999L,0.0));
-            obras.add(new Obra("Casa en la otra punta","Llevar 100grs de clavos y un martillo",84753.2163683408,"Rivadavia 1465 JUNIN",-34.575407,-60.962179,5423644448888L,0.0));
+             Log.e(TAG,"Error de conexion - USANDO LA BASE DE DATOS LOCAL");
+             try{
+                 obras = PPCDatabase.getInstance(this).obraDao().getAll();
+                 if(obras.isEmpty()){throw new NullPointerException();}
+                 for(Obra ob:obras){
+                     Log.e(TAG,ob.toString());
+                 }
+             }catch (Exception ex){
+                 new AlertDialog.Builder(MainActivity.this)
+                         .setIcon(android.R.drawable.stat_notify_error)
+                         .setTitle("Error")
+                         .setMessage("No existen datos locales disponibles, por favor intente mas tarde")
+                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener()
+                         {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 editor = sharedPreferences.edit();
+                                 editor.clear();
+                                 editor.apply();
+                                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                 startActivity(i);
+                             }
+
+                         })
+                         .show();
+             }
         }
         if (obras != null && !obras.isEmpty()) {
             //el json que provee el web service deberia contener un campo con un enlace a un recurso web que ilustre la obra
-            obras.get(0).setImage(R.drawable.galpon_xs);
-            obras.get(1).setImage(R.drawable.edificio_interminable_xs);
-            obras.get(2).setImage(R.drawable.casa_xs);
+            obras.get(0).setReferenceImage(R.drawable.galpon_xs);
+            obras.get(1).setReferenceImage(R.drawable.edificio_interminable_xs);
+            obras.get(2).setReferenceImage(R.drawable.casa_xs);
             adapter = new ObrasAdapter(obras);
             listado_obras.setAdapter(adapter);
-        } else {
-            alert.showAlertDialog(MainActivity.this, "Error!", "No hay obras para mostrar", false);
         }
     }
 

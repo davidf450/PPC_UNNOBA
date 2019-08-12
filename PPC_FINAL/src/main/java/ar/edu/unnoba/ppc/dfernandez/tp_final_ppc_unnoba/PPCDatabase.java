@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@androidx.room.Database(entities = {User.class},version = 1)
+@androidx.room.Database(entities = {User.class,Obra.class},version = 1)
 public abstract class PPCDatabase extends RoomDatabase {
     private static final String DB_NAME = "ppc_db";
     private static PPCDatabase PPCDatabaseInstance;
@@ -16,5 +16,6 @@ public abstract class PPCDatabase extends RoomDatabase {
         return PPCDatabaseInstance;
     }
     public abstract UserDao userDao();
+    public abstract ObraDao obraDao();
 
 }
