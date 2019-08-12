@@ -25,7 +25,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.android.volley.Request;
@@ -37,7 +39,13 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements
         LocationListener {
 
     private static final int PERMISSION_CHECK = 1800;
+    private static final int REQUEST_CHECK_SETTINGS = 1900 ;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Gson gson;
@@ -88,8 +97,75 @@ public class MainActivity extends AppCompatActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(INTERVAL)
                 .setFastestInterval(FAST_INTERVAL);
+        checkLocationServices(mLocationRequest);
+
     }
 
+    private void checkLocationServices(LocationRequest request){
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(request);
+        Task<LocationSettingsResponse> result =
+                LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(Task<LocationSettingsResponse> task) {
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+                } catch (ApiException exception) {
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            //las configuracion no son correctas, mostrar un dialogo al usuario
+                            try {
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                //mostramos el dialogo con startResolutionForResult() y verificamos la respuesta en onActivityResult()
+                                resolvable.startResolutionForResult(
+                                        MainActivity.this,
+                                        REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                            } catch (ClassCastException e) {
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            //no es posible cambiar las configuraciones actuales, no hay necesidad de mostrar el dialogo
+                            break;
+                    }
+                }
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        this.recreate();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        new AlertDialog.Builder(this)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle("Error")
+                                .setMessage("No es posible obtener datos precisos sin servicios de geolocalizacion")
+                                .setPositiveButton("Salir", new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editor = sharedPreferences.edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                        startActivity(i);
+                                    }
+
+                                })
+                                .show();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
