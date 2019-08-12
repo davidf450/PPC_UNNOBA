@@ -22,7 +22,6 @@ public class ObrasDetail extends AppCompatActivity {
     TextView descripcion,detalle,distancia,domicilio,latitud,longitud,telefono,valor;
     ImageView imgConstruccion;
     Obra obra;
-    MapView mapView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

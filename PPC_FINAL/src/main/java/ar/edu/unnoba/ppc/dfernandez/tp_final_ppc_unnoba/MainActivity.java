@@ -145,8 +145,6 @@ public class MainActivity extends AppCompatActivity implements
                     Si se encuentra un error con la conexion al webservice, se muestra una alerta
                     solicitando al usuario si desea Reintentar la conexion o salir de la aplicacion.
                     TODO: usar un contador de intentos, luego de cierta cantidad revertir a datos locales
-
-
                  */
                 /*new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.stat_notify_error)

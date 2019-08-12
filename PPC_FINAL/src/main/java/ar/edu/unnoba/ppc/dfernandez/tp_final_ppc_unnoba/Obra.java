@@ -17,7 +17,6 @@ public class Obra{
     private int referenceImage;
     public Obra(){};
 
-
     public Obra(String descripcion, String detalle, Double distancia, String domicilio, Double latitud, Double longitud, Long telefono, Double valor) {
         this.descripcion = descripcion;
         this.detalle = detalle;
@@ -31,9 +30,7 @@ public class Obra{
 
 
     //<editor-fold desc="Getters y Setters">
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescripcion() { return descripcion; }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;

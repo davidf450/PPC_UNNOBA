@@ -26,10 +26,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        new_user = (TextView) findViewById(R.id.new_user);
-        new_user_password = (TextView) findViewById(R.id.new_user_password);
-        passwordCheck = (TextView) findViewById(R.id.passwordCheck);
-        registrar = (Button) findViewById(R.id.registrar);
+        new_user = findViewById(R.id.new_user);
+        new_user_password = findViewById(R.id.new_user_password);
+        passwordCheck = findViewById(R.id.passwordCheck);
+        registrar = findViewById(R.id.registrar);
         registrar.setOnClickListener(this);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }

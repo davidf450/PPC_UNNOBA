@@ -17,5 +17,4 @@
         android:title="@string/button_logout"
         app:showAsAction="collapseActionView"
         />
-    PpcMapView
 </menu>

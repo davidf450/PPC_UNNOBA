@@ -26,11 +26,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        user = (EditText) findViewById(R.id.user);
-        password = (EditText) findViewById(R.id.password);
-        ingresar = (Button) findViewById(R.id.ingresar);
+        user = findViewById(R.id.user);
+        password = findViewById(R.id.password);
+        ingresar = findViewById(R.id.ingresar);
         ingresar.setOnClickListener(this);
-        registrar = (Button) findViewById(R.id.registrar);
+        registrar = findViewById(R.id.registrar);
         registrar.setOnClickListener(this);
         sharedPreferences = getSharedPreferences(S_PREFERENCES, Context.MODE_PRIVATE);
         user.setText("");
