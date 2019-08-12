@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -11,11 +12,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ObrasDetail" />
-        <activity
-            android:name=".ObrasAdapter"
-            android:label="@string/title_activity_obras" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".MapsActivity"  android:label="@string/title_activity_maps"/>
     </application>
