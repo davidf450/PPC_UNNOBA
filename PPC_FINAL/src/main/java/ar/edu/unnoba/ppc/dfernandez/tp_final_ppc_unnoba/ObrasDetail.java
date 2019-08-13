@@ -5,20 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.android.gms.maps.MapView;
 import com.google.gson.Gson;
-
-import java.text.DecimalFormat;
 
 public class ObrasDetail extends AppCompatActivity {
     SharedPreferences sharedPreferences;

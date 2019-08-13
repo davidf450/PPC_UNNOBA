@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 import android.view.Menu;
@@ -28,7 +27,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,16 +39,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -253,12 +248,6 @@ public class MainActivity extends AppCompatActivity implements
         cola.add(json_request);
     }
     private void llenar_lista(JSONArray source){
-        /*
-            TODO: Base de datos local de Obras
-                En cada conexion exitosa comparar lo obtenido con lo existente en una base local. Si hay datos nuevos
-           *    actualizar la base. De esta forma, si no se logra una conexion exitosa con el WS, pueden usarse datos
-           *    locales, advirtiendo al usuario de que posiblemente no este actualizados.
-        */
          if (source!=null) {
             obras = Arrays.asList(gson.fromJson(source.toString(), Obra[].class));
             if(PPCDatabase.getInstance(this).obraDao().getAll().isEmpty()) {
@@ -374,7 +363,6 @@ public class MainActivity extends AppCompatActivity implements
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         mGoogleApiClient.disconnect();
         url = "http://ppc.edit.com.ar/resources/datos/obras/"+location.getLatitude()+"/"+location.getLongitude();
-        //url = url+location.getLatitude()+"/"+location.getLongitude();
         cargar_obras();
     }
 }

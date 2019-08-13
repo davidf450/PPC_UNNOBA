@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Obras disponibles</string>
+    <string name="app_name">ObraX</string>
     <string name="help_user">Usuario</string>
     <string name="help_password">Clave</string>
     <string name="help_login">Gestión de obras en construcción</string>
@@ -19,9 +19,11 @@
     <string name="obra_distancia">Distancia:</string>
     <string name="map_view">Obtener direcciones</string>
     <string name="settingsMain">Preferencias</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Ubicacion</string>
     <string name="ppc_map_view">Ver en mapa</string>
     <string name="button_ingresar">Ingresar</string>
     <string name="button_registrar">Registrar</string>
     <string name="reconnect">Reconectar</string>
+    <string name="main_label">Obras disponibles</string>
+    <string name="signin_label">Registrarse</string>
 </resources>

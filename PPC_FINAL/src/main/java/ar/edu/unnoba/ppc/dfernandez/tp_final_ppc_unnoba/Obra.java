@@ -1,7 +1,5 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
-import android.graphics.Bitmap;
-
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;

@@ -1,7 +1,6 @@
 package ar.edu.unnoba.ppc.dfernandez.tp_final_ppc_unnoba;
 
 import android.content.Intent;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import com.google.gson.Gson;
 public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHolder> {
 
     private List<Obra> obras;
-    private Location loc;
     public ObrasAdapter(List<Obra> obras) {
         this.obras = obras;
     }
@@ -45,7 +43,6 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
                     Gson gson = new Gson();
                     String obra_json = gson.toJson(obra_mostrar);
                     intent.putExtra("myjson", obra_json);
-                    intent.putExtra("location",loc);
                     img.getContext().startActivity(intent);
                 }
             });
@@ -79,8 +76,5 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
     @Override
     public int getItemCount() {
         return obras.size();
-    }
-    public void setLocation(Location location){
-        this.loc = location;
     }
 }
