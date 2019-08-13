@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements
     RecyclerView listado_obras;
     ObrasAdapter adapter;
     ProgressBar pg;
+    boolean local = false;
     GoogleApiClient mGoogleApiClient;
     public static final String TAG = MainActivity.class.getSimpleName();
     final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements
                 .setInterval(INTERVAL)
                 .setFastestInterval(FAST_INTERVAL);
         checkLocationServices(mLocationRequest);
+
 
     }
 
@@ -209,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.i(TAG,"Se obtuvo una conexion exitosa con el webService en "+url);
+                        local=false;
                         llenar_lista(response);
                         pg.setVisibility(View.GONE);
                     }
@@ -216,33 +219,34 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG,"Error al conectar con el webService, revertiendo a datos locales");
-                new AlertDialog.Builder(MainActivity.this)
-                        .setIcon(android.R.drawable.stat_notify_error)
-                        .setTitle("Error")
-                        .setMessage("No es posible conectar con el web service, se utilizaran datos locales (podrian no estar actualizados) \n La distancia NO puede calcularse en base a datos locales")
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                llenar_lista(null);
-                                pg.setVisibility(View.GONE);
-                            }
+                if (!local) {
+                    Log.e(TAG, "Error al conectar con el webService, revertiendo a datos locales");
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setIcon(android.R.drawable.stat_notify_error)
+                            .setTitle("Error")
+                            .setMessage("No es posible conectar con el web service para actualizar, se utilizaran datos locales (podrian no estar actualizados) \n La distancia NO puede calcularse en base a datos locales")
+                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    local=true;
+                                    llenar_lista(null);
+                                    pg.setVisibility(View.GONE);
+                                }
 
-                        })
-                        .setNegativeButton("Salir", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                editor = sharedPreferences.edit();
-                                editor.clear();
-                                editor.apply();
-                                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                                startActivity(i);
-                            }
+                            })
+                            .setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    editor = sharedPreferences.edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(i);
+                                }
 
-                        })
-                        .show();
+                            })
+                            .show();
+                }
             }
         });
 
@@ -271,9 +275,6 @@ public class MainActivity extends AppCompatActivity implements
              try{
                  obras = PPCDatabase.getInstance(this).obraDao().getAll();
                  if(obras.isEmpty()){throw new NullPointerException();}
-                 for(Obra ob:obras){
-                     Log.e(TAG,ob.toString());
-                 }
              }catch (Exception ex){
                  new AlertDialog.Builder(MainActivity.this)
                          .setIcon(android.R.drawable.stat_notify_error)
