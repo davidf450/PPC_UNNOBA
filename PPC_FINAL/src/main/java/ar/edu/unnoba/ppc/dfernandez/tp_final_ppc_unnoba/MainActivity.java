@@ -286,9 +286,17 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (obras != null && !obras.isEmpty()) {
             //el json que provee el web service deberia contener un campo con un enlace a un recurso web que ilustre la obra
-            obras.get(0).setReferenceImage(R.drawable.galpon_xs);
-            obras.get(1).setReferenceImage(R.drawable.edificio_interminable_xs);
-            obras.get(2).setReferenceImage(R.drawable.casa_xs);
+            for(Obra o:obras){
+                if(o.getDescripcion().contains("parque")){
+                    o.setReferenceImage(R.drawable.galpon_xs);
+                }else if(o.getDescripcion().contains("interminable")){
+                    o.setReferenceImage(R.drawable.edificio_interminable_xs);
+                }else if(o.getDescripcion().contains("punta")){
+                    o.setReferenceImage(R.drawable.casa_xs);
+                }else{
+                    o.setReferenceImage(R.drawable.obras_launcher_background);
+                }
+            }
             adapter = new ObrasAdapter(obras);
             listado_obras.setAdapter(adapter);
         }
