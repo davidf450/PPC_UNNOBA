@@ -26,12 +26,10 @@ public class ObrasAdapter extends RecyclerView.Adapter<ObrasAdapter.ObrasViewHol
         TextView descripcion,detalle;
         CardView card;
         ImageView img;
-        LinearLayout ll;
         Obra obra_mostrar;
 
         public ObrasViewHolder(View view) {
             super(view);
-            ll = view.findViewById(R.id.parentLayout);
             card = view.findViewById(R.id.card_view);
             img = view.findViewById(R.id.imgConstruccion);
             descripcion = view.findViewById(R.id.descripcion);
